@@ -3,7 +3,14 @@ require("dotenv").config();
 
 var keyInfo = require("./keys.js");
 
-var spotify = new Spotify(keys.spotify);
-
-console.log(keyInfo);
-
+var spotifyNode = require('node-spotify-api');
+ 
+var spotify = new spotifyNode(keyInfo.spotify);
+   
+  spotify.search({type: 'track', query: 'All the Small Things', limit: 2}, function(err, result) {
+      if (err) {
+          console.log(err);
+      }
+      console.log(JSON.stringify(result, null, 2));
+  });
+ 
