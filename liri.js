@@ -25,8 +25,11 @@ var songQuery = args.slice(3).join("+");
         console.log("\r\n\r\n");
         //console.log(JSON.stringify(result, null, 2));
         console.log("Artist(s): " + result.tracks.items[0].artists[0].name);
+        console.log("\r");
         console.log("Song Name: " + result.tracks.items[0].name);
+        console.log("\r");
         console.log("Spotify Song Preview: " + result.tracks.items[0].preview_url);
+        console.log("\r");
         console.log("Album: " + result.tracks.items[0].album.name);
         console.log("\r\n\r\n");
 
@@ -38,25 +41,31 @@ var axios = require("axios");
 var movieName = args.slice(3).join("+"); //take a copy of an array and make a new variable 
 console.log(movieName);
 
-var movieUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
-
 // Then run a request with axios to the OMDB API with the movie specified
 if (request == "movie-this") {
-    axios.get(movieUrl).then(
-    function(err, response) {
-        if (err) {
-            console.log("\r\n");
-            console.log("Sorry, we can't find the movie you're searching for, please try another title!");
-            console.log("\r\n\r\n");
-            return;
-          } else {
-         console.log(response.data);
-          }
-        // console.log("Movie Title: " + response.data.Title);
-        // console.log("Movie Release Year: " );
-        // console.log("The movie's rating is: " + response.data.imdbRating);
-        // console.log("The movie's plot is: " + response.data.Plot);
-            }
-        );
+    var movieUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 
-};
+    axios.get(movieUrl).then(
+    function(result) {
+
+          console.log("\r\n\r\n");
+          console.log("Movie Title: " + result.data.Title);
+          console.log("\r");
+          console.log("Movie Release Year: " + result.data.Year);
+          console.log("\r");
+          console.log("IMDB Rating: " + result.data.imdbRating);
+          console.log("\r");
+          console.log("Rotten Tomatoes Rating: " + result.data.Ratings[1].Value);
+          console.log("\r");
+          console.log("Production Country: " + result.data.Country);
+          console.log("\r");
+          console.log("Production Language: " + result.data.Language);
+          console.log("\r");
+          console.log("Movie Plot: " + result.data.Plot);
+          console.log("\r");
+          console.log("Movie Actors: " + result.data.Actors);
+          console.log("\r\n\r\n");
+      
+      });
+      
+  }; 
