@@ -11,7 +11,7 @@ var spotifyNode = require('node-spotify-api');
  
 var spotify = new spotifyNode(keyInfo.spotify);
 var songQuery = args.slice(3).join("+");
-console.log(songQuery);
+//console.log(songQuery);
    
 
   if (request == "spotify-this-song") {
@@ -23,11 +23,13 @@ console.log(songQuery);
           return;
         }
         console.log("\r\n\r\n");
-        console.log(JSON.stringify(result, null, 2));
-        //console.log("Artist(s): " + result.tracks.items.artists.name);
-        console.log("Song Name: ");
-        console.log("Spotify Song Preview: ");
-        console.log("Song Album: ");
+        //console.log(JSON.stringify(result, null, 2));
+        console.log("Artist(s): " + result.tracks.items[0].artists[0].name);
+        console.log("Song Name: " + result.tracks.items[0].name);
+        console.log("Spotify Song Preview: " + result.tracks.items[0].preview_url);
+        console.log("Album: " + result.tracks.items[0].album.name);
+        console.log("\r\n\r\n");
+
     }); 
   };
 
