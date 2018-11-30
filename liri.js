@@ -76,6 +76,32 @@ function runMovie() {
           console.log("\r\n\r\n");
       
       }); 
+  } else if (movieName = undefined) {
+    var defaultMovieUrl = "http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&apikey=trilogy";
+
+      axios.get(defaultMovieUrl).then(
+      function(result) {
+
+          console.log("\r\n\r\n");
+          console.log("Movie Title: " + result.data.Title);
+          console.log("\r");
+          console.log("Movie Release Year: " + result.data.Year);
+          console.log("\r");
+          console.log("IMDB Rating: " + result.data.imdbRating);
+          console.log("\r");
+          console.log("Rotten Tomatoes Rating: " + result.data.Ratings[1].Value);
+          console.log("\r");
+          console.log("Production Country: " + result.data.Country);
+          console.log("\r");
+          console.log("Production Language: " + result.data.Language);
+          console.log("\r");
+          console.log("Movie Plot: " + result.data.Plot);
+          console.log("\r");
+          console.log("Movie Actors: " + result.data.Actors);
+          console.log("\r\n\r\n");
+      
+      }); 
+
   }
 };
 
@@ -116,7 +142,6 @@ runBand();
 
 //do-what-it-says command
 if (request == "do-what-it-says") {
-  var random = [];
   fs.readFile("random.txt", "utf8", function(error, data) { //callback thats taking in two arguments
     if (error) {
       return console.log(error); //can do return instead of else in the if else
