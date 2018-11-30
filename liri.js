@@ -10,7 +10,7 @@ var args = process.argv;
 var request = process.argv[2];
 
 //Spotify code
-function runSpotify() {
+function runSpotify(value) {
   var spotifyNode = require('node-spotify-api');
   
   var spotify = new spotifyNode(keyInfo.spotify);
@@ -49,7 +49,7 @@ function runSpotify() {
 
       };
 
-runSpotify();
+//runSpotify();
 
 //OMDB API code
 function runMovie() {
@@ -150,12 +150,11 @@ function runBand() {
 
 //do-what-it-says command
 function runRandom() {
-  if (request == "do-what-it-says") {
+  
     fs.readFile("random.txt", "utf8", function(error, data) { //callback thats taking in two arguments
       if (error) {
         return console.log(error); //can do return instead of else in the if else
       }
-        //console.log(data);
         var dataArr = data.split(",");
         //console.log(dataArr);
 
@@ -167,8 +166,8 @@ function runRandom() {
 
     })
 
-  }
-};
+  };
+
 
 //put all requests into a log file - not working
 function log() {
@@ -185,15 +184,23 @@ function log() {
   })
 };
 
-var liri = function(request, output) {
+var liri = function(request, value) {
   switch (request) {
-  case "spotify-this-song":
-    deposit(value);
-    break;
-  case "withdraw":
-    withdraw(value);
-    break;
-  default:
-    console.log("You don't bank here");
+    case "spotify-this-song":
+      runSpotify(songQuery);
+      break;
+    case "movie-this":
+      runMovie(movieName);
+      break;
+    case "concert-this":
+      runBand(bandName);
+      break;
+    case "do-what-it-says":
+      runRandom(value);
+      runSpotify(songQuery = dataArr[1]);
+    default:
+      console.log("Nothing to see here");
   }
 };
+
+liri();
