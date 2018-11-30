@@ -160,8 +160,8 @@ if (request == "do-what-it-says") {
 
 }
 
-//put all requests into a log file
-fs.appendFile("log.txt", request, function(err) {
+//put all requests into a log file - not working
+fs.appendFile("log.txt", "songQuery, movieName, bandName", function(err) {
 
   // If the code experiences any errors it will log the error to the console.
   if (err) {
