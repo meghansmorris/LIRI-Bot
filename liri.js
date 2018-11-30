@@ -116,17 +116,26 @@ runBand();
 
 //do-what-it-says command
 if (request == "do-what-it-says") {
+  var random = [];
   fs.readFile("random.txt", "utf8", function(error, data) { //callback thats taking in two arguments
     if (error) {
       return console.log(error); //can do return instead of else in the if else
     }
-      console.log(data);
-      runSpotify(data);
+      //console.log(data);
+      var dataArr = data.split(", ");
+      //console.log(dataArr);
 
+      dataArr.forEach(function(randomThings) {
+        console.log(randomThings);
+        
+        
+      })
 
   })
+
 }
 
+//put all requests into a log file
 fs.appendFile("log.txt", request, function(err) {
 
   // If the code experiences any errors it will log the error to the console.
