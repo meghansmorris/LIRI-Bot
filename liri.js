@@ -3,6 +3,9 @@ require("dotenv").config();
 
 //global variables
 var keyInfo = require("./keys.js");
+var moment = require('moment');
+  moment().format();
+var fs = require("fs");
 var args = process.argv;
 var request = process.argv[2];
 
@@ -90,10 +93,15 @@ if (request == "concert-this") {
           console.log("\r");
           console.log("Venue Location: " + bandResults[i].venue.city + ", " + bandResults[i].venue.country);
           console.log("\r");
-          console.log("Concert Date: " + bandResults[i].datetime);
+          console.log("Concert Date: " + moment(bandResults[i].datetime).format("MM/DD/YYYY"));
           console.log("\r\n\r\n");
       }
       
   })
 
 };
+
+//do-what-it-says command
+if (request == "do-what-it-says") {
+
+}
