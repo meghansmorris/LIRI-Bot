@@ -10,11 +10,12 @@ var args = process.argv;
 var request = process.argv[2];
 
 //Spotify code
-var spotifyNode = require('node-spotify-api');
- 
-var spotify = new spotifyNode(keyInfo.spotify);
-var songQuery = args.slice(3).join("+");
-//console.log(songQuery);
+function runSpotify() {
+  var spotifyNode = require('node-spotify-api');
+  
+  var spotify = new spotifyNode(keyInfo.spotify);
+  var songQuery = args.slice(3).join("+");
+  //console.log(songQuery);
    
 
   if (request == "spotify-this-song") {
@@ -39,17 +40,22 @@ var songQuery = args.slice(3).join("+");
     }); 
   };
 
+};
+
+runSpotify();
+
 //OMDB API code
-var axios = require("axios");
-var movieName = args.slice(3).join("+"); //take a copy of an array and make a new variable 
-//console.log(movieName);
+function runMovie() {
+  var axios = require("axios");
+  var movieName = args.slice(3).join("+"); //take a copy of an array and make a new variable 
+  //console.log(movieName);
 
-// Then run a request with axios to the OMDB API with the movie specified
-if (request == "movie-this") {
-    var movieUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+  // Then run a request with axios to the OMDB API with the movie specified
+  if (request == "movie-this") {
+      var movieUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 
-    axios.get(movieUrl).then(
-    function(result) {
+      axios.get(movieUrl).then(
+      function(result) {
 
           console.log("\r\n\r\n");
           console.log("Movie Title: " + result.data.Title);
@@ -69,39 +75,66 @@ if (request == "movie-this") {
           console.log("Movie Actors: " + result.data.Actors);
           console.log("\r\n\r\n");
       
-      });
-      
-  }; 
+      }); 
+  }
+};
+
+runMovie();
 
 //Bands in Town API code
-var bandName = args.slice(3).join("+"); //take a copy of an array and make a new variable 
-//console.log(bandName);
+function runBand() {
+  var bandName = args.slice(3).join("+"); //take a copy of an array and make a new variable 
+  //console.log(bandName);
 
-// Then run a request with axios to the Bands in Town API with the band specified
-if (request == "concert-this") {
-    var bandUrl = "https://rest.bandsintown.com/artists/" + bandName + "/events?app_id=codingbootcamp";
+  // Then run a request with axios to the Bands in Town API with the band specified
+  if (request == "concert-this") {
+      var bandUrl = "https://rest.bandsintown.com/artists/" + bandName + "/events?app_id=codingbootcamp";
 
-    axios.get(bandUrl).then(
-    function(result) {
-          var bandResults = result.data;
+      axios.get(bandUrl).then(
+      function(result) {
+            var bandResults = result.data;
 
-          for(i=0; i<bandResults.length; i++) {
-          console.log("\r\n\r\n");
-          console.log("Tour Name: " + bandResults[i].description);
-          console.log("\r");
-          console.log("Venue Name: " + bandResults[i].venue.name);
-          console.log("\r");
-          console.log("Venue Location: " + bandResults[i].venue.city + ", " + bandResults[i].venue.country);
-          console.log("\r");
-          console.log("Concert Date: " + moment(bandResults[i].datetime).format("MM/DD/YYYY"));
-          console.log("\r\n\r\n");
-      }
-      
-  })
+            for(i=0; i<bandResults.length; i++) {
+            console.log("\r\n\r\n");
+            console.log("Tour Name: " + bandResults[i].description);
+            console.log("\r");
+            console.log("Venue Name: " + bandResults[i].venue.name);
+            console.log("\r");
+            console.log("Venue Location: " + bandResults[i].venue.city + ", " + bandResults[i].venue.country);
+            console.log("\r");
+            console.log("Concert Date: " + moment(bandResults[i].datetime).format("MM/DD/YYYY"));
+            console.log("\r\n\r\n");
+        }
+        
+    })
+
+  };
 
 };
 
+runBand();
+
 //do-what-it-says command
 if (request == "do-what-it-says") {
+  fs.readFile("random.txt", "utf8", function(error, data) { //callback thats taking in two arguments
+    if (error) {
+      return console.log(error); //can do return instead of else in the if else
+    }
+      console.log(data);
+      runSpotify(data);
 
+
+  })
 }
+
+fs.appendFile("log.txt", request, function(err) {
+
+  // If the code experiences any errors it will log the error to the console.
+  if (err) {
+    return console.log(err);
+  }
+
+  // Otherwise, it will print: "movies.txt was updated!"
+  console.log("log.txt was updated!");
+
+});
