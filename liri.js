@@ -39,7 +39,7 @@ var songQuery = args.slice(3).join("+");
 //OMDB API code
 var axios = require("axios");
 var movieName = args.slice(3).join("+"); //take a copy of an array and make a new variable 
-console.log(movieName);
+//console.log(movieName);
 
 // Then run a request with axios to the OMDB API with the movie specified
 if (request == "movie-this") {
@@ -69,3 +69,31 @@ if (request == "movie-this") {
       });
       
   }; 
+
+//Bands in Town API code
+var bandName = args.slice(3).join("+"); //take a copy of an array and make a new variable 
+//console.log(bandName);
+
+// Then run a request with axios to the Bands in Town API with the band specified
+if (request == "concert-this") {
+    var bandUrl = "https://rest.bandsintown.com/artists/" + bandName + "/events?app_id=codingbootcamp";
+
+    axios.get(bandUrl).then(
+    function(result) {
+          var bandResults = result.data;
+
+          for(i=0; i<bandResults.length; i++) {
+          console.log("\r\n\r\n");
+          console.log("Tour Name: " + bandResults[i].description);
+          console.log("\r");
+          console.log("Venue Name: " + bandResults[i].venue.name);
+          console.log("\r");
+          console.log("Venue Location: " + bandResults[i].venue.city + ", " + bandResults[i].venue.country);
+          console.log("\r");
+          console.log("Concert Date: " + bandResults[i].datetime);
+          console.log("\r\n\r\n");
+      }
+      
+  })
+
+};
