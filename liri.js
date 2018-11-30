@@ -17,30 +17,37 @@ function runSpotify() {
   var songQuery = args.slice(3).join("+");
   //console.log(songQuery);
    
-
-  if (request == "spotify-this-song") {
+  if (songQuery == "") {
+    spotify.search({type: 'track', market: 'US', query: "Ace+of+Base", limit: 1}, function(err, result) {
+      console.log("\r\n\r\n");
+      //console.log(JSON.stringify(result, null, 2));
+      console.log("Artist(s): " + result.tracks.items[0].artists[0].name);
+      console.log("\r");
+      console.log("Song Name: " + result.tracks.items[0].name);
+      console.log("\r");
+      console.log("Spotify Song Preview: " + result.tracks.items[0].preview_url);
+      console.log("\r");
+      console.log("Album: " + result.tracks.items[0].album.name);
+      console.log("\r\n\r\n");
+    })
+  } else if (songQuery) {
     spotify.search({type: 'track', market: 'US', query: songQuery, limit: 1}, function(err, result) {
-        if (err) {
-          console.log("\r\n");
-          console.log("Sorry, we can't find the song you're searching for, please try another track!");
-          console.log("\r\n\r\n");
-          return;
-        }
-        console.log("\r\n\r\n");
-        //console.log(JSON.stringify(result, null, 2));
-        console.log("Artist(s): " + result.tracks.items[0].artists[0].name);
-        console.log("\r");
-        console.log("Song Name: " + result.tracks.items[0].name);
-        console.log("\r");
-        console.log("Spotify Song Preview: " + result.tracks.items[0].preview_url);
-        console.log("\r");
-        console.log("Album: " + result.tracks.items[0].album.name);
-        console.log("\r\n\r\n");
 
-    }); 
+      console.log("\r\n\r\n");
+      //console.log(JSON.stringify(result, null, 2));
+      console.log("Artist(s): " + result.tracks.items[0].artists[0].name);
+      console.log("\r");
+      console.log("Song Name: " + result.tracks.items[0].name);
+      console.log("\r");
+      console.log("Spotify Song Preview: " + result.tracks.items[0].preview_url);
+      console.log("\r");
+      console.log("Album: " + result.tracks.items[0].album.name);
+      console.log("\r\n\r\n");
+
+    }) 
   };
 
-};
+      };
 
 runSpotify();
 
@@ -51,10 +58,10 @@ function runMovie() {
   //console.log(movieName);
 
   // Then run a request with axios to the OMDB API with the movie specified
-  if (request == "movie-this") {
-      var movieUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+  if (movieName == "") {
+    var defaultMovieUrl = "http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&apikey=trilogy";
 
-      axios.get(movieUrl).then(
+      axios.get(defaultMovieUrl).then(
       function(result) {
 
           console.log("\r\n\r\n");
@@ -76,10 +83,11 @@ function runMovie() {
           console.log("\r\n\r\n");
       
       }); 
-  } else if (movieName = undefined) {
-    var defaultMovieUrl = "http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&apikey=trilogy";
+  
+    } else if (movieName) {
+      var movieUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
 
-      axios.get(defaultMovieUrl).then(
+      axios.get(movieUrl).then(
       function(result) {
 
           console.log("\r\n\r\n");
@@ -105,7 +113,7 @@ function runMovie() {
   }
 };
 
-runMovie();
+//runMovie();
 
 //Bands in Town API code
 function runBand() {
@@ -138,37 +146,54 @@ function runBand() {
 
 };
 
-runBand();
+//runBand();
 
 //do-what-it-says command
-if (request == "do-what-it-says") {
-  fs.readFile("random.txt", "utf8", function(error, data) { //callback thats taking in two arguments
-    if (error) {
-      return console.log(error); //can do return instead of else in the if else
-    }
-      //console.log(data);
-      var dataArr = data.split(", ");
-      //console.log(dataArr);
+function runRandom() {
+  if (request == "do-what-it-says") {
+    fs.readFile("random.txt", "utf8", function(error, data) { //callback thats taking in two arguments
+      if (error) {
+        return console.log(error); //can do return instead of else in the if else
+      }
+        //console.log(data);
+        var dataArr = data.split(",");
+        //console.log(dataArr);
 
-      dataArr.forEach(function(randomThings) {
-        console.log(randomThings);
-        
-        
-      })
+        dataArr.forEach(function(randomThings) {
+          console.log(randomThings);
+          
+          
+        })
 
-  })
+    })
 
-}
+  }
+};
 
 //put all requests into a log file - not working
-fs.appendFile("log.txt", "songQuery, movieName, bandName", function(err) {
+function log() {
+  fs.appendFile("log.txt", "songQuery, movieName, bandName", function(err) {
 
-  // If the code experiences any errors it will log the error to the console.
-  if (err) {
-    return console.log(err);
+    // If the code experiences any errors it will log the error to the console.
+    if (err) {
+      return console.log(err);
+    }
+
+    // Otherwise, it will print: "movies.txt was updated!"
+    console.log("log.txt was updated!");
+
+  })
+};
+
+var liri = function(request, output) {
+  switch (request) {
+  case "spotify-this-song":
+    deposit(value);
+    break;
+  case "withdraw":
+    withdraw(value);
+    break;
+  default:
+    console.log("You don't bank here");
   }
-
-  // Otherwise, it will print: "movies.txt was updated!"
-  console.log("log.txt was updated!");
-
-});
+};

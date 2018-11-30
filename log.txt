@@ -1,1 +1,1 @@
-songQuery, movieName, bandName
+songQuery, movieName, bandNamesongQuery, movieName, bandNamesongQuery, movieName, bandName
