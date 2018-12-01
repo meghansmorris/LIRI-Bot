@@ -137,6 +137,8 @@ function runBand() {
 
 //do-what-it-says command
 function runRandom() {
+    request = [];
+    input = "";
   
     fs.readFile("random.txt", "utf8", function(error, data) { //callback thats taking in two arguments
       if (error) {
@@ -145,13 +147,18 @@ function runRandom() {
         
         console.log(data);
         var dataArr = data.split(",");
-        console.log(dataArr);
+        //console.log(dataArr);
 
-        dataArr.forEach(function(randomThings) {
-        console.log(randomThings);
+      //   dataArr.forEach(function(randomThings) {
+      //   //console.log(randomThings);
           
-      })
+      // })
+      request = dataArr[0];
       input = dataArr[1];
+      console.log(request);
+      console.log(input);
+
+      liri(request, input);
 
     };
     
@@ -177,19 +184,20 @@ function log() {
 
 log();
 
-var liri = function(request) {
+
+var liri = function(request, input) {
   switch (request) {
     case "spotify-this-song":
-      runSpotify();
+      runSpotify(input);
       break;
     case "movie-this":
-      runMovie();
+      runMovie(input);
       break;
     case "concert-this":
-      runBand();
+      runBand(input);
       break;
     case "do-what-it-says":
-      runRandom(input);
+      runRandom();
     default:
       console.log("Nothing to see here");
   }
