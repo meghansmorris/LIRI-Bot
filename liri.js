@@ -6,18 +6,19 @@ var keyInfo = require("./keys.js");
 var moment = require('moment');
   moment().format();
 var fs = require("fs");
+var axios = require("axios");
+
 var args = process.argv;
 var request = process.argv[2];
+var input = args.slice(3).join("+");
 
 //Spotify code
-function runSpotify(value) {
+function runSpotify() {
   var spotifyNode = require('node-spotify-api');
   
   var spotify = new spotifyNode(keyInfo.spotify);
-  var songQuery = args.slice(3).join("+");
-  //console.log(songQuery);
    
-  if (songQuery == "") {
+  if (input == "") {
     spotify.search({type: 'track', market: 'US', query: "Ace+of+Base", limit: 1}, function(err, result) {
       console.log("\r\n\r\n");
       //console.log(JSON.stringify(result, null, 2));
@@ -30,8 +31,8 @@ function runSpotify(value) {
       console.log("Album: " + result.tracks.items[0].album.name);
       console.log("\r\n\r\n");
     })
-  } else if (songQuery) {
-    spotify.search({type: 'track', market: 'US', query: songQuery, limit: 1}, function(err, result) {
+  } else if (input) {
+    spotify.search({type: 'track', market: 'US', query: input, limit: 1}, function(err, result) {
 
       console.log("\r\n\r\n");
       //console.log(JSON.stringify(result, null, 2));
@@ -47,18 +48,13 @@ function runSpotify(value) {
     }) 
   };
 
-      };
-
-//runSpotify();
+};
 
 //OMDB API code
 function runMovie() {
-  var axios = require("axios");
-  var movieName = args.slice(3).join("+"); //take a copy of an array and make a new variable 
-  //console.log(movieName);
 
   // Then run a request with axios to the OMDB API with the movie specified
-  if (movieName == "") {
+  if (input == "") {
     var defaultMovieUrl = "http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&apikey=trilogy";
 
       axios.get(defaultMovieUrl).then(
@@ -84,8 +80,8 @@ function runMovie() {
       
       }); 
   
-    } else if (movieName) {
-      var movieUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+    } else if (input) {
+      var movieUrl = "http://www.omdbapi.com/?t=" + input + "&y=&plot=short&apikey=trilogy";
 
       axios.get(movieUrl).then(
       function(result) {
@@ -113,16 +109,11 @@ function runMovie() {
   }
 };
 
-//runMovie();
-
 //Bands in Town API code
 function runBand() {
-  var bandName = args.slice(3).join("+"); //take a copy of an array and make a new variable 
-  //console.log(bandName);
 
   // Then run a request with axios to the Bands in Town API with the band specified
-  if (request == "concert-this") {
-      var bandUrl = "https://rest.bandsintown.com/artists/" + bandName + "/events?app_id=codingbootcamp";
+      var bandUrl = "https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp";
 
       axios.get(bandUrl).then(
       function(result) {
@@ -144,34 +135,34 @@ function runBand() {
 
   };
 
-};
-
-//runBand();
-
 //do-what-it-says command
 function runRandom() {
   
     fs.readFile("random.txt", "utf8", function(error, data) { //callback thats taking in two arguments
       if (error) {
         return console.log(error); //can do return instead of else in the if else
-      }
+      } else {
+        
+        console.log(data);
         var dataArr = data.split(",");
-        //console.log(dataArr);
+        console.log(dataArr);
 
         dataArr.forEach(function(randomThings) {
-          console.log(randomThings);
+        console.log(randomThings);
           
-          
-        })
+      })
+      input = dataArr[1];
 
-    })
+    };
+    
+  });
 
   };
 
 
 //put all requests into a log file - not working
 function log() {
-  fs.appendFile("log.txt", "songQuery, movieName, bandName", function(err) {
+  fs.appendFile("log.txt", input, function(err) {
 
     // If the code experiences any errors it will log the error to the console.
     if (err) {
@@ -184,23 +175,24 @@ function log() {
   })
 };
 
-var liri = function(request, value) {
+log();
+
+var liri = function(request) {
   switch (request) {
     case "spotify-this-song":
-      runSpotify(songQuery);
+      runSpotify();
       break;
     case "movie-this":
-      runMovie(movieName);
+      runMovie();
       break;
     case "concert-this":
-      runBand(bandName);
+      runBand();
       break;
     case "do-what-it-says":
-      runRandom(value);
-      runSpotify(songQuery = dataArr[1]);
+      runRandom(input);
     default:
       console.log("Nothing to see here");
   }
 };
 
-liri();
+liri(request);
