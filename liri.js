@@ -11,6 +11,7 @@ var axios = require("axios");
 var args = process.argv;
 var request = process.argv[2];
 var input = args.slice(3).join("+");
+var output = ("");
 
 //Spotify code
 function runSpotify() {
@@ -22,38 +23,36 @@ function runSpotify() {
     spotify.search({type: 'track', market: 'US', query: "Ace+of+Base", limit: 1}, function(err, result) {
       console.log("\r\n\r\n");
       //console.log(JSON.stringify(result, null, 2));
-      console.log("Artist(s): " + result.tracks.items[0].artists[0].name);
-      console.log("\r");
-      console.log("Song Name: " + result.tracks.items[0].name);
-      console.log("\r");
-      console.log("Spotify Song Preview: " + result.tracks.items[0].preview_url);
-      console.log("\r");
-      console.log("Album: " + result.tracks.items[0].album.name);
-      console.log("\r\n\r\n");
-    })
+      var output = (
+        console.log("Artist(s): " + result.tracks.items[0].artists[0].name),
+        console.log("\r"),
+        console.log("Song Name: " + result.tracks.items[0].name),
+        console.log("\r"),
+        console.log("Spotify Song Preview: " + result.tracks.items[0].preview_url),
+        console.log("\r"),
+        console.log("Album: " + result.tracks.items[0].album.name),
+        console.log("\r\n\r\n"));
+      });
   } else if (input) {
     spotify.search({type: 'track', market: 'US', query: input, limit: 1}, function(err, result) {
 
       console.log("\r\n\r\n");
       //console.log(JSON.stringify(result, null, 2));
-      console.log("Artist(s): " + result.tracks.items[0].artists[0].name);
-      console.log("\r");
-      console.log("Song Name: " + result.tracks.items[0].name);
-      console.log("\r");
-      console.log("Spotify Song Preview: " + result.tracks.items[0].preview_url);
-      console.log("\r");
-      console.log("Album: " + result.tracks.items[0].album.name);
-      console.log("\r\n\r\n");
-
-    }) 
+      var output = (
+      console.log("Artist(s): " + result.tracks.items[0].artists[0].name),
+      console.log("\r"),
+      console.log("Song Name: " + result.tracks.items[0].name),
+      console.log("\r"),
+      console.log("Spotify Song Preview: " + result.tracks.items[0].preview_url),
+      console.log("\r"),
+      console.log("Album: " + result.tracks.items[0].album.name),
+      console.log("\r\n\r\n"));
+    }); 
   };
-
 };
 
 //OMDB API code
 function runMovie() {
-
-  // Then run a request with axios to the OMDB API with the movie specified
   if (input == "") {
     var defaultMovieUrl = "http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&apikey=trilogy";
 
@@ -77,9 +76,7 @@ function runMovie() {
           console.log("\r");
           console.log("Movie Actors: " + result.data.Actors);
           console.log("\r\n\r\n");
-      
       }); 
-  
     } else if (input) {
       var movieUrl = "http://www.omdbapi.com/?t=" + input + "&y=&plot=short&apikey=trilogy";
 
@@ -103,16 +100,12 @@ function runMovie() {
           console.log("\r");
           console.log("Movie Actors: " + result.data.Actors);
           console.log("\r\n\r\n");
-      
       }); 
-
   }
 };
 
 //Bands in Town API code
 function runBand() {
-
-  // Then run a request with axios to the Bands in Town API with the band specified
       var bandUrl = "https://rest.bandsintown.com/artists/" + input + "/events?app_id=codingbootcamp";
 
       axios.get(bandUrl).then(
@@ -130,9 +123,7 @@ function runBand() {
             console.log("Concert Date: " + moment(bandResults[i].datetime).format("MM/DD/YYYY"));
             console.log("\r\n\r\n");
         }
-        
     })
-
   };
 
 //do-what-it-says command
@@ -144,46 +135,31 @@ function runRandom() {
       if (error) {
         return console.log(error); //can do return instead of else in the if else
       } else {
-        
-        console.log(data);
-        var dataArr = data.split(",");
-        //console.log(dataArr);
+      var dataArr = data.split(",");
 
-      //   dataArr.forEach(function(randomThings) {
-      //   //console.log(randomThings);
-          
-      // })
       request = dataArr[0];
       input = dataArr[1];
       console.log(request);
       console.log(input);
 
       liri(request, input);
-
-    };
-    
+    };  
   });
-
-  };
-
-
-//put all requests into a log file - not working
-function log() {
-  fs.appendFile("log.txt", input, function(err) {
-
-    // If the code experiences any errors it will log the error to the console.
-    if (err) {
-      return console.log(err);
-    }
-
-    // Otherwise, it will print: "movies.txt was updated!"
-    console.log("log.txt was updated!");
-
-  })
 };
+//put all requests into a log file - not working
+// function log() {
+//   fs.appendFile("log.txt", output, function(err) {
 
-log();
+//     // If the code experiences any errors it will log the error to the console.
+//     if (err) {
+//       return console.log(err);
+//     }
+//     console.log(output);
 
+//     console.log("log.txt was updated!");
+
+//   })
+// };
 
 var liri = function(request, input) {
   switch (request) {
